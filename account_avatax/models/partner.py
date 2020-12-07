@@ -26,7 +26,7 @@ class ResPartner(models.Model):
         """
         companies = self.env["res.company"].search([])
         for company in companies:
-            Partner = self.env["res.partner"].with_context(force_company=company.id)
+            Partner = self.env["res.partner"].with_company(company) 
             pending_exempt_partners = Partner.search(
                 [
                     ("exemption_code_id", "!=", False),
