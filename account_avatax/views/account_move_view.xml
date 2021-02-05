@@ -35,7 +35,7 @@
                 <field name="exemption_locked" />
             </field>
             <xpath expr="//field[@name='partner_shipping_id']" position="after">
-                <field name="so_partner_id" />
+                <field name="so_partner_id" readonly="1" />
             </xpath>
         </field>
     </record>

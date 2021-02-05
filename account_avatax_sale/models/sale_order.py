@@ -128,14 +128,13 @@ class SaleOrder(models.Model):
     def _get_avatax_doc_type(self, commit=False):
         return "SalesOrder"
 
-    def _avatax_prepare_lines(self, doc_type=None):
+    def _avatax_prepare_lines(self, order_lines, doc_type=None):
         """
         Prepare the lines to use for Avatax computation.
         Returns a list of dicts
         """
         lines = [
-            line._avatax_prepare_line(sign=1, doc_type=doc_type)
-            for line in self.order_line
+            line._avatax_prepare_line(sign=1, doc_type=doc_type) for line in order_lines
         ]
         return [x for x in lines if x]
 
