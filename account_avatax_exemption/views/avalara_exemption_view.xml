@@ -33,6 +33,13 @@
                     confirm="Are you sure you want to Enable the Exemptions?"
                 />
             </xpath>
+            <xpath expr="//field[@name='business_type']" position="after">
+                <field
+                    name="exemption_code_id"
+                    options="{'no_create': True}"
+                    required="1"
+                />
+            </xpath>
         </field>
     </record>
     <!-- Exemption Rules -->
@@ -125,6 +132,56 @@
             </tree>
         </field>
     </record>
+    <record id="exemption_reason_type_form_view" model="ir.ui.view">
+        <field name="name">res.partner.exemption.business.type.form.view</field>
+        <field name="model">res.partner.exemption.business.type</field>
+        <field name="type">form</field>
+        <field
+            name="inherit_id"
+            ref="account_avatax_exemption_base.exemption_reason_type_form_view"
+        />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field
+                    name="exemption_code_id"
+                    options="{'no_create': True}"
+                    required="1"
+                />
+            </xpath>
+        </field>
+    </record>
+    <record id="exemption_reason_type_tree_view" model="ir.ui.view">
+        <field name="name">res.partner.exemption.business.type.tree.view</field>
+        <field name="model">res.partner.exemption.business.type</field>
+        <field name="type">form</field>
+        <field
+            name="inherit_id"
+            ref="account_avatax_exemption_base.exemption_reason_type_tree_view"
+        />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="exemption_code_id" />
+            </xpath>
+        </field>
+    </record>
+    <record id="exemption_type_form_view" model="ir.ui.view">
+        <field name="name">res.partner.exemption.type.form.view</field>
+        <field name="model">res.partner.exemption.type</field>
+        <field name="type">form</field>
+        <field
+            name="inherit_id"
+            ref="account_avatax_exemption_base.exemption_type_form_view"
+        />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='business_type']" position="after">
+                <field
+                    name="exemption_code_id"
+                    options="{'no_create': True}"
+                    required="1"
+                />
+            </xpath>
+        </field>
+    </record>
     <record id="exemption_rule_act_window" model="ir.actions.act_window">
         <field name="name">Avatax Custom Rules</field>
         <field name="res_model">exemption.code.rule</field>
@@ -134,6 +191,30 @@
     <menuitem
         id="menu_exemption_rule"
         action="exemption_rule_act_window"
+        parent="account_avatax.menu_avatax"
+        sequence="31"
+    />
+    <menuitem
+        id="menu_group_of_states"
+        action="account_avatax_exemption_base.group_of_states_act_window"
+        parent="account_avatax.menu_avatax"
+        sequence="31"
+    />
+    <menuitem
+        id="menu_exemption_type"
+        action="account_avatax_exemption_base.exemption_type_act_window"
+        parent="account_avatax.menu_avatax"
+        sequence="31"
+    />
+    <menuitem
+        id="menu_exemption_reason_type"
+        action="account_avatax_exemption_base.exemption_reason_type_act_window"
+        parent="account_avatax.menu_avatax"
+        sequence="31"
+    />
+    <menuitem
+        id="menu_exemption"
+        action="account_avatax_exemption_base.exemption_act_window"
         parent="account_avatax.menu_avatax"
         sequence="31"
     />
