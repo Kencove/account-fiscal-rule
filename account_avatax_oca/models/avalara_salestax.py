@@ -320,6 +320,14 @@ class AvalaraSalestax(models.Model):
                     doc_code,
                     {"code": "DocVoided"},
                 )
+                self.env["avatax.log"].sudo().create(
+                    {
+                        "avatax_request": result.get("id"),
+                        "avatax_response": result,
+                        "create_date_time": fields.Datetime.now(),
+                        "avatax_type": "cancel",
+                    }
+                )
             return result
 
     def unvoid_transaction(self, doc_code, doc_type):
