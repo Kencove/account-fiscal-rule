@@ -322,6 +322,14 @@ class AvaTaxRESTService:
         if log_to_record:
             log_to_record.avatax_request_log = pprint.pformat(data, indent=1)
             log_to_record.avatax_response_log = pprint.pformat(result, indent=1)
+        self.config.env["avatax.log"].sudo().create(
+            {
+                "avatax_request": data,
+                "avatax_response": result,
+                "create_date_time": fields.Datetime.now(),
+                "avatax_type": doc_type,
+            }
+        )
         return self._enrich_result_lines_with_tax_rate(result)
 
     def call(self, endpoint, company_code, doc_code, model=None, params=None):
