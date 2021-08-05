@@ -226,5 +226,34 @@
         <field name="binding_view_types">tree</field>
         <field name="view_mode">tree,form</field>
     </record>
-
+    <menuitem
+        id="menu_exemption"
+        name="AvaTax Exemption"
+        parent="account.menu_finance_configuration"
+        sequence="2"
+    />
+    <menuitem
+        id="menu_group_of_states"
+        action="group_of_states_act_window"
+        parent="menu_exemption"
+        sequence="31"
+    />
+       <menuitem
+        id="menu_exemption_type"
+        action="exemption_type_act_window"
+        parent="menu_exemption"
+        sequence="31"
+    />
+     <menuitem
+        id="menu_exemption_reason_type"
+        action="exemption_reason_type_act_window"
+        parent="menu_exemption"
+        sequence="31"
+    />
+       <menuitem
+        id="menu_avatax_exemption"
+        action="exemption_act_window"
+        parent="menu_exemption"
+        sequence="31"
+    />
 </odoo>
