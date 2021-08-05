@@ -10,6 +10,7 @@
     "license": "LGPL-3",
     "depends": [
         "mail",
+        "account",
     ],
     "data": [
         "security/ir.model.access.csv",

@@ -194,28 +194,4 @@
         parent="account_avatax.menu_avatax"
         sequence="31"
     />
-    <menuitem
-        id="menu_group_of_states"
-        action="account_avatax_exemption_base.group_of_states_act_window"
-        parent="account_avatax.menu_avatax"
-        sequence="31"
-    />
-    <menuitem
-        id="menu_exemption_type"
-        action="account_avatax_exemption_base.exemption_type_act_window"
-        parent="account_avatax.menu_avatax"
-        sequence="31"
-    />
-    <menuitem
-        id="menu_exemption_reason_type"
-        action="account_avatax_exemption_base.exemption_reason_type_act_window"
-        parent="account_avatax.menu_avatax"
-        sequence="31"
-    />
-    <menuitem
-        id="menu_exemption"
-        action="account_avatax_exemption_base.exemption_act_window"
-        parent="account_avatax.menu_avatax"
-        sequence="31"
-    />
 </odoo>
