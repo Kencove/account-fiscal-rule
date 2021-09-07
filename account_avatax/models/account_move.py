@@ -105,6 +105,9 @@ class AccountMove(models.Model):
     avatax_amount = fields.Float(string="AvaTax", copy=False)
     calculate_tax_on_save = fields.Boolean()
     so_partner_id = fields.Many2one(comodel_name="res.partner", string="SO Partner")
+    avatax_amt_line_override = fields.Boolean(
+        string="Use Odoo Tax on invoices/credit note", default=False
+    )
 
     @api.depends(
         "line_ids.debit",
@@ -187,6 +190,9 @@ class AccountMove(models.Model):
         if not avatax_config:
             # Skip Avatax computation if no configuration is found
             return
+        avatax_line_override = False
+        if self.avatax_amt_line_override and self.move_type == "out_refund":
+            avatax_line_override = True
         doc_type = self._get_avatax_doc_type(commit=commit)
         tax_date = self.get_origin_tax_date() or self.invoice_date
         taxable_lines = self._avatax_prepare_lines(doc_type)
@@ -208,6 +214,7 @@ class AccountMove(models.Model):
             # TODO: can we report self.invoice_doc_no?
             self.name if self.move_type == "out_refund" else "",
             self.location_code or "",
+            avatax_line_override,
             is_override=self.move_type == "out_refund",
             currency_id=self.currency_id,
             ignore_error=300 if commit else None,
@@ -225,6 +232,9 @@ class AccountMove(models.Model):
             avatax_config.unvoid_transaction(self.name, doc_type)
             avatax_config.commit_transaction(self.name, doc_type)
             return tax_result
+
+        if self.avatax_amt_line_override and self.move_type == "out_refund":
+            return
 
         if self.state == "draft":
             Tax = self.env["account.tax"]
@@ -407,6 +417,13 @@ class AccountMove(models.Model):
             record.avatax_compute_taxes()
         return record
 
+    def action_reverse(self):
+        action = super().action_reverse()
+        action["context"] = {
+            "default_avatax_amt_line_override": self.avatax_amt_line_override,
+        }
+        return action
+
 
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
@@ -465,6 +482,9 @@ class AccountMoveLine(models.Model):
         amount = sign * line._get_avatax_amount()
         if line.quantity < 0:
             amount = -amount
+        avatax_amt = 0.0
+        if line.move_id.move_type == "out_refund":
+            avatax_amt = -(line.price_total - line.price_subtotal)
         res = {
             "qty": line.quantity,
             "itemcode": item_code,
@@ -474,6 +494,7 @@ class AccountMoveLine(models.Model):
             "id": line,
             "account_id": line.account_id.id,
             "tax_id": line.tax_ids,
+            "avatax_amt_line": round(avatax_amt, 2),
         }
         return res
 
