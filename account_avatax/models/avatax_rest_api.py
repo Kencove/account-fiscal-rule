@@ -261,12 +261,12 @@ class AvaTaxRESTService:
                     "reason": "Refund",
                     "taxAmountByTaxTypes": [
                         {
-                            "taxTypeId": "U",
+                            "taxTypeId": line.get("avatax_tax_type"),
                             "TaxAmount": line.get("avatax_amt_line", 0.0),
                         }
                     ],
                 }
-                if avatax_line_override
+                if avatax_line_override and line.get("avatax_tax_type")
                 else None,
             }
             for line in received_lines

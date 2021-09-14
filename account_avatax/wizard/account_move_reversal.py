@@ -9,7 +9,9 @@ class AccountMoveReversal(models.TransientModel):
     _inherit = "account.move.reversal"
 
     avatax_amt_line_override = fields.Boolean(
-        string="Use Odoo Tax on invoices/credit note", default=False
+        string="Use Odoo Tax",
+        default=False,
+        help="The Odoo tax will be uploaded to Avatax",
     )
 
     def _prepare_default_reversal(self, move):
