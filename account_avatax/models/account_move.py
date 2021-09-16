@@ -423,8 +423,10 @@ class AccountMove(models.Model):
 
     def action_reverse(self):
         action = super().action_reverse()
+        avatax_tax_type = self.invoice_line_ids.filtered(lambda t: t.avatax_tax_type)
         action["context"] = {
             "default_avatax_amt_line_override": self.avatax_amt_line_override,
+            "hide_override": 1 if avatax_tax_type else 0,
         }
         return action
 

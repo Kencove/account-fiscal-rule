@@ -6,7 +6,10 @@
         <field name="type">form</field>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='date']" position="after">
-                <field name="avatax_amt_line_override" />
+                <field
+                    name="avatax_amt_line_override"
+                    invisible="not context.get('hide_override')"
+                />
             </xpath>
         </field>
     </record>
