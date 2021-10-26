@@ -61,6 +61,7 @@ class AccountTax(models.Model):
         partner=None,
         is_refund=False,
         handle_price_include=True,
+        include_caba_tags=False,
     ):
         """
         Adopted as the central point to inject custom tax computations.
@@ -76,6 +77,7 @@ class AccountTax(models.Model):
             partner,
             is_refund,
             handle_price_include,
+            include_caba_tags=False,
         )
         avatax_invoice = self.env.context.get("avatax_invoice")
         if avatax_invoice:
