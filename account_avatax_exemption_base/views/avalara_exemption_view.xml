@@ -24,7 +24,7 @@
         <field name="model">res.partner.group.state</field>
         <field name="type">tree</field>
         <field name="arch" type="xml">
-            <tree string="Group of States">
+            <tree>
                 <field name="name" />
                 <field name="country_id" />
                 <field
@@ -79,7 +79,7 @@
         <field name="model">res.partner.exemption.type</field>
         <field name="type">tree</field>
         <field name="arch" type="xml">
-            <tree string="Exemption Type">
+            <tree>
                 <field name="name" />
                 <field
                     name="state_ids"
@@ -125,7 +125,7 @@
         <field name="model">res.partner.exemption.business.type</field>
         <field name="type">tree</field>
         <field name="arch" type="xml">
-            <tree string="Exemption Activity Type">
+            <tree>
                 <field name="name" />
                 <field name="exemption_code_id" />
                 <field name="avatax_id" />
@@ -150,7 +150,7 @@
         <field name="model">res.partner.exemption</field>
         <field name="type">form</field>
         <field name="arch" type="xml">
-            <form string="Exemption">
+            <form>
                 <header>
                     <field
                         name="state"
@@ -191,7 +191,7 @@
                     <notebook>
                         <page string="Exemption Lines">
                             <field name="exemption_line_ids" nolabel="1">
-                                <tree string="Exemption Lines">
+                                <tree>
                                     <field name="name" />
                                     <field
                                         name="state_id"
@@ -238,7 +238,7 @@
         <field name="model">res.partner.exemption</field>
         <field name="type">tree</field>
         <field name="arch" type="xml">
-            <tree string="Exemption">
+            <tree>
                 <field
                     name="partner_id"
                     invisible="context.get('hide_partner', False)"
