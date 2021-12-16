@@ -105,6 +105,11 @@ class AccountMove(models.Model):
     avatax_amount = fields.Float(string="AvaTax", copy=False)
     calculate_tax_on_save = fields.Boolean()
     so_partner_id = fields.Many2one(comodel_name="res.partner", string="SO Partner")
+    avatax_amt_line_override = fields.Boolean(
+        string="Use Odoo Tax",
+        default=False,
+        help="The Odoo tax will be uploaded to Avatax",
+    )
 
     @api.depends(
         "line_ids.debit",
@@ -187,6 +192,9 @@ class AccountMove(models.Model):
         if not avatax_config:
             # Skip Avatax computation if no configuration is found
             return
+        avatax_line_override = False
+        if self.avatax_amt_line_override and self.move_type == "out_refund":
+            avatax_line_override = True
         doc_type = self._get_avatax_doc_type(commit=commit)
         tax_date = self.get_origin_tax_date() or self.invoice_date
         taxable_lines = self._avatax_prepare_lines(doc_type)
@@ -208,6 +216,7 @@ class AccountMove(models.Model):
             # TODO: can we report self.invoice_doc_no?
             self.name if self.move_type == "out_refund" else "",
             self.location_code or "",
+            avatax_line_override,
             is_override=self.move_type == "out_refund",
             currency_id=self.currency_id,
             ignore_error=300 if commit else None,
@@ -226,6 +235,9 @@ class AccountMove(models.Model):
             avatax_config.commit_transaction(self.name, doc_type)
             return tax_result
 
+        if self.avatax_amt_line_override and self.move_type == "out_refund":
+            return
+
         if self.state == "draft":
             Tax = self.env["account.tax"]
             tax_result_lines = {int(x["lineNumber"]): x for x in tax_result["lines"]}
@@ -240,6 +252,7 @@ class AccountMove(models.Model):
                         line_taxes = line.tax_ids.filtered(lambda x: not x.is_avatax)
                         taxes_to_set.append((index, line_taxes | tax))
                     line.avatax_amt_line = tax_result_line["tax"]
+                    line.avatax_tax_type = tax_result_line["details"][0]["taxSubTypeId"]
             self.avatax_amount = tax_result["totalTax"]
             self.with_context(
                 avatax_invoice=self, check_move_validity=False
@@ -268,6 +281,7 @@ class AccountMove(models.Model):
                 invoice.move_type in ["out_invoice", "out_refund"]
                 and invoice.fiscal_position_id.is_avatax
                 and (invoice.state == "draft" or commit)
+                and (not invoice.avatax_amt_line_override or commit)
             ):
                 invoice._avatax_compute_tax(commit=commit)
         return True
@@ -408,11 +422,21 @@ class AccountMove(models.Model):
             record.avatax_compute_taxes()
         return record
 
+    def action_reverse(self):
+        action = super().action_reverse()
+        avatax_tax_type = self.invoice_line_ids.filtered(lambda t: t.avatax_tax_type)
+        action["context"] = {
+            "default_avatax_amt_line_override": self.avatax_amt_line_override,
+            "hide_override": 1 if avatax_tax_type else 0,
+        }
+        return action
+
 
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
 
     avatax_amt_line = fields.Float(string="AvaTax Line", copy=False)
+    avatax_tax_type = fields.Char()
 
     def _get_avatax_amount(self, qty=None):
         """
@@ -466,6 +490,9 @@ class AccountMoveLine(models.Model):
         amount = sign * line._get_avatax_amount()
         if line.quantity < 0:
             amount = -amount
+        avatax_amt = 0.0
+        if line.move_id.move_type == "out_refund":
+            avatax_amt = -(line.price_total - line.price_subtotal)
         res = {
             "qty": line.quantity,
             "itemcode": item_code,
@@ -475,6 +502,8 @@ class AccountMoveLine(models.Model):
             "id": line,
             "account_id": line.account_id.id,
             "tax_id": line.tax_ids,
+            "avatax_amt_line": round(avatax_amt, 2),
+            "avatax_tax_type": line.avatax_tax_type,
         }
         return res
 

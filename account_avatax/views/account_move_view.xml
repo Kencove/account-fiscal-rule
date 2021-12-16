@@ -14,6 +14,9 @@
                     attrs="{'invisible': [('state', 'not in', ['draft'])]}"
                 />
             </button>
+            <xpath expr="//button[@name='action_reverse']" position="attributes">
+                <attribute name="context">{'avatax_amt_line_override': True}</attribute>
+            </xpath>
             <group id="header_right_group" position="inside">
                 <field name="exemption_code" readonly="1" />
                 <field name="exemption_code_id" readonly="1" />
@@ -31,6 +34,10 @@
                 <field
                     name="invoice_doc_no"
                     attrs="{'invisible': [('move_type','!=','out_refund')]}"
+                />
+                <field
+                    name="avatax_amt_line_override"
+                    groups="account_avatax.access_avatax_override_group"
                 />
             </field>
             <xpath expr="//field[@name='partner_shipping_id']" position="after">
