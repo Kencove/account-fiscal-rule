@@ -3,6 +3,7 @@ import logging
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 from odoo.tests.common import Form
+from odoo.tools.safe_eval import safe_eval
 
 _logger = logging.getLogger(__name__)
 
@@ -192,9 +193,9 @@ class AccountMove(models.Model):
         if not avatax_config:
             # Skip Avatax computation if no configuration is found
             return
-        avatax_line_override = False
-        if self.avatax_amt_line_override and self.move_type == "out_refund":
-            avatax_line_override = True
+        avatax_line_override = (
+            self.avatax_amt_line_override and self.move_type == "out_refund"
+        )
         doc_type = self._get_avatax_doc_type(commit=commit)
         tax_date = self.get_origin_tax_date() or self.invoice_date
         taxable_lines = self._avatax_prepare_lines(doc_type)
@@ -235,10 +236,7 @@ class AccountMove(models.Model):
             avatax_config.commit_transaction(self.name, doc_type)
             return tax_result
 
-        if self.avatax_amt_line_override and self.move_type == "out_refund":
-            return
-
-        if self.state == "draft":
+        if self.state == "draft" and not avatax_line_override:
             Tax = self.env["account.tax"]
             tax_result_lines = {int(x["lineNumber"]): x for x in tax_result["lines"]}
             taxes_to_set = []
@@ -424,10 +422,13 @@ class AccountMove(models.Model):
     def action_reverse(self):
         action = super().action_reverse()
         avatax_tax_type = self.invoice_line_ids.filtered(lambda t: t.avatax_tax_type)
-        action["context"] = {
-            "default_avatax_amt_line_override": self.avatax_amt_line_override,
-            "hide_override": 1 if avatax_tax_type else 0,
-        }
+        action["context"] = safe_eval(action.get("context", "{}"))
+        action["context"].update(
+            {
+                "default_avatax_amt_line_override": self.avatax_amt_line_override,
+                "hide_override": 1 if avatax_tax_type else 0,
+            }
+        )
         return action
 
 

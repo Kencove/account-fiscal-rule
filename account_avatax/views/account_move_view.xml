@@ -14,9 +14,6 @@
                     attrs="{'invisible': [('state', 'not in', ['draft'])]}"
                 />
             </button>
-            <xpath expr="//button[@name='action_reverse']" position="attributes">
-                <attribute name="context">{'avatax_amt_line_override': True}</attribute>
-            </xpath>
             <group id="header_right_group" position="inside">
                 <field name="exemption_code" readonly="1" />
                 <field name="exemption_code_id" readonly="1" />
