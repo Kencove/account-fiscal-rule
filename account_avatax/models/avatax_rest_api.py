@@ -319,6 +319,16 @@ class AvaTaxRESTService:
 
         response = self.client.create_or_adjust_transaction(data)
         result = self.get_result(response, ignore_error=ignore_error)
+        self.config.env["avatax.log"].sudo().create(
+            {
+                "avatax_request": data,
+                "avatax_response": result,
+                "create_date_time": fields.Datetime.now(),
+                "avatax_type": "SalesOrder"
+                if doc_type in ["SalesOrder", "ReturnOrder"]
+                else "SalesInvoice",
+            }
+        )
         return self._enrich_result_lines_with_tax_rate(result)
 
     def call(self, endpoint, company_code, doc_code, model=None, params=None):
