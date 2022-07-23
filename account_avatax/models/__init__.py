@@ -7,3 +7,4 @@ from . import account_tax
 from . import res_company
 from . import retail_group
 from . import avatax_rest_api
+from . import avatax_log

@@ -9,3 +9,4 @@ access_avalara_salestax_ping,avalara_salestax_ping,model_avalara_salestax_ping,b
 access_retail_group,retail_group,model_retail_group,base.group_user,1,1,1,1
 access_retail_group_for_all_groups,retail_group,model_retail_group,,1,0,0,0
 access_avalara_salestax_address_validate,avalara_salestax_address_validate,model_avalara_salestax_address_validate,base.group_user,1,1,1,1
+access_avatax_log,avatax_log,model_avatax_log,base.group_user,1,1,1,1
