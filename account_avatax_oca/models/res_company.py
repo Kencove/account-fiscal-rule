@@ -2,7 +2,7 @@ import logging
 
 from odoo import _, models
 
-_LOGGER = logging.getLogger(__name__)
+_logger = logging.getLogger(__name__)
 
 
 class Company(models.Model):
@@ -17,12 +17,12 @@ class Company(models.Model):
                 [("company_id", "=", self.id), ("disable_tax_calculation", "=", False)]
             )
             if len(res) > 1:
-                _LOGGER.warn(
+                _logger.warning(
                     _("Company %s has too many Avatax configurations!"),
                     self.display_name,
                 )
             if len(res) < 1:
-                _LOGGER.warn(
+                _logger.warning(
                     _("Company %s has no Avatax configuration."), self.display_name
                 )
             return res and res[0]
