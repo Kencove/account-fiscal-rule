@@ -145,6 +145,7 @@ class AvalaraSalestax(models.Model):
         help="If Boolean is checked, SO Partner Customer Code "
         "on Invoice will be used",
     )
+    retail_group_ids = fields.Many2many("retail.group", string="Retail Delivery Fee")
     # TODO: add option to Display Prices with Tax Included
 
     # constraints on uniq records creation with account_number and company_id
