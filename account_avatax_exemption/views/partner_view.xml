@@ -41,23 +41,30 @@
                 <attribute name="invisible">1</attribute>
             </xpath>
             <xpath
-                expr="//group/group[2]/field[@name='property_tax_exempt']"
+                expr="//page[last()]//field[@name='property_tax_exempt']"
                 position="attributes"
             >
                 <attribute name="invisible">1</attribute>
             </xpath>
             <xpath
-                expr="//group/group[2]//field[@name='property_exemption_code_id']"
+                expr="//page[last()]//field[@name='property_exemption_code_id']"
                 position="attributes"
             >
                 <attribute name="invisible">1</attribute>
             </xpath>
             <xpath
-                expr="//group/group[2]//field[@name='property_exemption_number']"
+                expr="//page[last()]//field[@name='property_exemption_number']"
                 position="attributes"
             >
                 <attribute name="invisible">1</attribute>
             </xpath>
+            <xpath
+                expr="//group[@name='avatax_exemption']"
+                position="attributes"
+            >
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
         </field>
     </record>
 
@@ -80,19 +87,25 @@
                 <attribute name="invisible">0</attribute>
             </xpath>
             <xpath
-                expr="//group/group[2]/field[@name='property_tax_exempt']"
+                expr="//page[last()]//field[@name='property_tax_exempt']"
                 position="attributes"
             >
                 <attribute name="invisible">0</attribute>
             </xpath>
             <xpath
-                expr="//group/group[2]/field[@name='property_exemption_code_id']"
+                expr="//page[last()]//field[@name='property_exemption_code_id']"
                 position="attributes"
             >
                 <attribute name="invisible">0</attribute>
             </xpath>
             <xpath
-                expr="//group/group[2]/field[@name='property_exemption_number']"
+                expr="//page[last()]//field[@name='property_exemption_number']"
+                position="attributes"
+            >
+                <attribute name="invisible">0</attribute>
+            </xpath>
+            <xpath
+                expr="//group[@name='avatax_exemption']"
                 position="attributes"
             >
                 <attribute name="invisible">0</attribute>
