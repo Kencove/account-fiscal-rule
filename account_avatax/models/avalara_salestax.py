@@ -267,7 +267,7 @@ class AvalaraSalestax(models.Model):
             return False
 
         if commit and avatax_config.disable_tax_reporting:
-            _logger.warn(
+            _logger.warning(
                 _("Avatax commiting document %s, but it tax reporting is disabled."),
                 doc_code,
             )
