@@ -1,6 +1,6 @@
 {
     "name": "Avatax Exemptions",
-    "version": "14.0.1.1.1",
+    "version": "14.0.2.0.0",
     "category": "Sales",
     "summary": """
         This application allows you to add exemptions to Avatax
@@ -8,7 +8,14 @@
     "website": "https://github.com/OCA/account-fiscal-rule",
     "author": "Sodexis, Odoo Community Association (OCA)",
     "license": "AGPL-3",
-    "depends": ["website", "product", "queue_job", "account_avatax_exemption_base"],
+    "depends": [
+        "website",
+        "product",
+        "queue_job",
+        "account_avatax",
+        "account_avatax_sale",
+        "account_avatax_exemption_base",
+    ],
     "data": [
         "security/ir.model.access.csv",
         "data/cron.xml",
@@ -22,6 +29,7 @@
         "views/website_layout.xml",
         "views/website_exemption_tree.xml",
         "views/website_exemption_form.xml",
+        "views/partner_view.xml",
     ],
     "external_dependencies": {"python": ["Avalara"]},
     "installable": True,
