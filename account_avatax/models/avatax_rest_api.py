@@ -332,6 +332,16 @@ class AvaTaxRESTService:
             )
         response = self.client.create_or_adjust_transaction(data)
         result = self.get_result(response, ignore_error=ignore_error)
+        self.config.env["avatax.log"].sudo().create(
+            {
+                "avatax_request": data,
+                "avatax_response": result,
+                "create_date_time": fields.Datetime.now(),
+                "avatax_type": "SalesOrder"
+                if doc_type in ["SalesOrder", "ReturnOrder"]
+                else "SalesInvoice",
+            }
+        )
         if log_to_record:
             log_to_record.avatax_request_log = pprint.pformat(data, indent=1)
             log_to_record.avatax_response_log = pprint.pformat(result, indent=1)
