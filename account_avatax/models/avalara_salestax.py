@@ -142,8 +142,15 @@ class AvalaraSalestax(models.Model):
     )
     use_so_partner_id = fields.Boolean(
         string="Use Sale Customer Code on Invoice",
-        help="If Boolean is checked, SO Partner Customer Code "
-        "on Invoice will be used",
+        help="Use Sales Order's Customer field to determine Taxable "
+        "Status on the Customer Invoice. If no Sales Order exists, "
+        "Customer field on the invoice form view will be used instead",
+    )
+    hide_exemption = fields.Boolean(
+        "Hide Exemption & Tax Based on shipping address",
+        default=False,
+        help="Uncheck the this field to show exemption fields on SO/Invoice form view. "
+        "Also, it will show Tax based on shipping address button",
     )
     # TODO: add option to Display Prices with Tax Included
 
@@ -193,6 +200,7 @@ class AvalaraSalestax(models.Model):
         invoice_date=None,
         reference_code=None,
         location_code=None,
+        avatax_line_override=None,
         is_override=None,
         currency_id=None,
         ignore_error=None,
@@ -283,6 +291,7 @@ class AvalaraSalestax(models.Model):
             location_code,
             currency_code,
             partner.vat or None,
+            avatax_line_override,
             is_override,
             ignore_error=ignore_error,
             log_to_record=log_to_record,
