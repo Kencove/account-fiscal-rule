@@ -287,7 +287,11 @@ class AccountMove(models.Model):
                         tax = retail_delivery_fee_tax.sudo().copy(default=vals)
                         line.retail_delivery_fee_id.tax_ids |= tax
                     if tax and tax not in line.tax_ids:
-                        line_taxes = line.tax_ids.filtered(lambda x: not x.is_avatax)
+                        line_taxes = (
+                            tax
+                            if avatax_config.override_line_taxes
+                            else line.tax_ids.filtered(lambda x: not x.is_avatax)
+                        )
                         taxes_to_set.append((index, line_taxes | tax))
                     line.avatax_amt_line = fixed_tax_amount
                     line.avatax_tax_type = tax_result_line["details"][0]["taxSubTypeId"]
