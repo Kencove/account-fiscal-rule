@@ -87,15 +87,20 @@ class AccountTax(models.Model):
             digits = 6
             avatax_amount = None
             for line in avatax_invoice.invoice_line_ids:
-                price_unit = line.currency_id._convert(
-                    price_unit,
-                    avatax_invoice.company_id.currency_id,
-                    avatax_invoice.company_id,
-                    avatax_invoice.date,
-                )
+                price_unit = price_unit_wo_discount = price_unit
+                if avatax_invoice.is_invoice(include_receipts=True):
+                    price_unit_wo_discount = line.price_unit * (
+                        1 - (line.discount / 100.0)
+                    )
+                else:
+                    price_unit_wo_discount = line.amount_currency
                 if (
                     line.product_id == product
                     and float_compare(line.quantity, quantity, digits) == 0
+                    and float_compare(
+                        abs(price_unit), abs(price_unit_wo_discount), digits
+                    )
+                    == 0
                 ):
                     avatax_amount = copysign(line.avatax_amt_line, base)
                     break
