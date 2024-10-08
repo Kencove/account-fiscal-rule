@@ -89,6 +89,24 @@ msgid "Created on"
 msgstr "Creado el"
 
 #. module: account_product_fiscal_classification
+#: model:ir.model.fields,field_description:account_product_fiscal_classification.field_product_product__taxes_id
+#: model:ir.model.fields,field_description:account_product_fiscal_classification.field_product_template__taxes_id
+msgid "Customer Taxes"
+msgstr ""
+
+#. module: account_product_fiscal_classification
+#: model:ir.model.fields,help:account_product_fiscal_classification.field_product_product__supplier_taxes_id
+#: model:ir.model.fields,help:account_product_fiscal_classification.field_product_template__supplier_taxes_id
+msgid "Default taxes used when buying the product."
+msgstr ""
+
+#. module: account_product_fiscal_classification
+#: model:ir.model.fields,help:account_product_fiscal_classification.field_product_product__taxes_id
+#: model:ir.model.fields,help:account_product_fiscal_classification.field_product_template__taxes_id
+msgid "Default taxes used when selling the product."
+msgstr ""
+
+#. module: account_product_fiscal_classification
 #: model:account.product.fiscal.classification.template,name:account_product_fiscal_classification.fiscal_classification_template
 msgid "Demo Fiscal Classification Template"
 msgstr "Plantilla Demo de Clasificación Fiscal"
@@ -368,22 +386,15 @@ msgid "Taxes"
 msgstr "Impuestos"
 
 #. module: account_product_fiscal_classification
+#: model:ir.model.fields,field_description:account_product_fiscal_classification.field_product_product__supplier_taxes_id
+#: model:ir.model.fields,field_description:account_product_fiscal_classification.field_product_template__supplier_taxes_id
+msgid "Vendor Taxes"
+msgstr ""
+
+#. module: account_product_fiscal_classification
 #: model:ir.model,name:account_product_fiscal_classification.model_wizard_change_fiscal_classification
 msgid "Wizard : Change fiscal classification on product"
 msgstr "Asistente : Cambiar la clasificación fiscal de un producto"
-
-#. module: account_product_fiscal_classification
-#. odoo-python
-#: code:addons/account_product_fiscal_classification/models/product_template.py:0
-#, python-format
-msgid ""
-"You can not create or write products with 'Customer Taxes' or 'Supplier "
-"Taxes'\n"
-".Please, use instead the 'Fiscal Classification' field."
-msgstr ""
-"No puede crear o escribir productos con 'Impuestos de Cliente' o 'Impuestos "
-"de Proveedor'.\n"
-"Por favor, utilice en su lugar el campo 'Clasificación Fiscal'."
 
 #. module: account_product_fiscal_classification
 #. odoo-python
@@ -397,6 +408,16 @@ msgstr ""
 "No puede eliminar la clasificación fiscal '%(classification_name)s' porque "
 "contiene %(qty)s productos. Por favor, mueva primero los productos a otra "
 "Clasificación Fiscal."
+
+#, python-format
+#~ msgid ""
+#~ "You can not create or write products with 'Customer Taxes' or 'Supplier "
+#~ "Taxes'\n"
+#~ ".Please, use instead the 'Fiscal Classification' field."
+#~ msgstr ""
+#~ "No puede crear o escribir productos con 'Impuestos de Cliente' o "
+#~ "'Impuestos de Proveedor'.\n"
+#~ "Por favor, utilice en su lugar el campo 'Clasificación Fiscal'."
 
 #, python-format
 #~ msgid " - Sale Taxes: "
