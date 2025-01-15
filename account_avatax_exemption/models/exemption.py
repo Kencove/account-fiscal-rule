@@ -38,13 +38,14 @@ class ExemptionRule(models.Model):
             if record.avatax_rate < 0 or record.avatax_rate > 100:
                 raise ValidationError(_("Avatax rate range is from 0 to 100"))
 
-    @api.model
-    def create(self, vals):
-        if vals.get("name", _("New")) == _("New"):
-            vals["name"] = self.env["ir.sequence"].next_by_code(
-                "exemption.code.rule.sequence"
-            ) or _("New")
-        return super().create(vals)
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get("name", _("New")) == _("New"):
+                vals["name"] = self.env["ir.sequence"].next_by_code(
+                    "exemption.line.sequence"
+                ) or _("New")
+        return super().create(vals_list)
 
     def export_exemption_rule(self):
         if self.filtered(lambda x: x.state != "draft"):
@@ -165,7 +166,7 @@ class ResPartner(models.Model):
     _inherit = "res.partner"
 
     @api.model
-    def _search(self, domain, offset=0, limit=None, order=None, access_rights_uid=None):
+    def _search(self, domain, offset=0, limit=None, order=None):
         context = dict(self._context)
         if context.get("partner_exemption", False):
             domain = domain or []
@@ -176,7 +177,7 @@ class ResPartner(models.Model):
             )
             if avalara_salestax.use_commercial_entity:
                 domain += [("parent_id", "=", False)]
-        return super()._search(domain, offset, limit, order, access_rights_uid)
+        return super()._search(domain, offset, limit, order)
 
 
 class ResPartnerExemption(models.Model):
