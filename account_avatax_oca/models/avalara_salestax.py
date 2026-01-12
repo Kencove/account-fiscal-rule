@@ -41,7 +41,8 @@ class AvalaraSalestax(models.Model):
         [
             ("https://rest.avatax.com/api/v2", "Production (REST API)"),
             ("https://sandbox-rest.avatax.com/api/v2", "Sandbox (REST API)"),
-            ("https://tax.kencove.com", "Kencove Tax (REST API)"),
+            ("https://tax.gc.kencove.com", "Kencove Tax (REST API)"),
+            ("https://tax-staging.gc.kencove.com", "Kencove Tax Staging (REST API)"),
         ],
         string="Service URL",
         default="https://rest.avatax.com/api/v2",
