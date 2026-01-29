@@ -37,17 +37,18 @@ class AvalaraSalestax(models.Model):
         name="Account ID", required=True, help="Account Number provided by AvaTax"
     )
     license_key = fields.Char(required=True, help="License Key provided by AvaTax")
-    service_url = fields.Char(
+    service_url = fields.Selection(
+        [
+            ("https://rest.avatax.com/api/v2", "Production (REST API)"),
+            ("https://sandbox-rest.avatax.com/api/v2", "Sandbox (REST API)"),
+            ("https://tax.gc.kencove.com", "Kencove Tax (REST API)"),
+            ("https://tax-v2.gc.kencove.com", "Kencove Tax Prod V2 (REST API)"),
+            ("https://tax-staging.gc.kencove.com", "Kencove Tax Staging (REST API)"),
+            ("https://tax-v2-staging.gc.kencove.com", "Kencove Tax Staging V2 (REST API)"),
+        ],
         string="Service URL",
         default="https://rest.avatax.com/api/v2",
-        required=True,
-        help="The url to connect with. Common URLs: "
-        "Production: https://rest.avatax.com/api/v2, "
-        "Sandbox: https://sandbox-rest.avatax.com/api/v2, "
-        "Kencove Tax: https://tax.gc.kencove.com, "
-        "Kencove Tax V2: https://tax-v2.gc.kencove.com, "
-        "Kencove Staging: https://tax-staging.gc.kencove.com, "
-        "Kencove Staging V2: https://tax-v2-staging.gc.kencove.com",
+        help="The url to connect with",
     )
     request_timeout = fields.Integer(
         default=300,
