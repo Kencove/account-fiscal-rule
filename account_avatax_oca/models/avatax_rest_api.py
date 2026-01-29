@@ -34,7 +34,12 @@ class AvaTaxRESTService:
         self.hostname = socket.gethostname()
         url = url or (config and config.service_url) or ""
         # Allow passing custom urls
-        if url.startswith("https://") or url.startswith("http://"):
+        if "rest.avatax.com" in url:
+            self.environment = "production"
+        elif "sandbox-rest.avatax.com" in url:
+            self.environment = "sandbox"
+        elif url.startswith("https://") or url.startswith("http://"):
+            # Custom URL (e.g., Kencove endpoints)
             self.environment = url
         elif "sandbox" in url or "development" in url:
             self.environment = "sandbox"
